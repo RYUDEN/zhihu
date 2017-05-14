@@ -4,9 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from 'vuex'
+import font from './font-awesome/css/font-awesome.min.css'
 import VueResource from 'vue-resource'
 // import storage from '/storage/stroage'
-
+Vue.use(font)
 Vue.use(Vuex)
 Vue.use(VueResource)
 // Vue.prototype.storage = storage

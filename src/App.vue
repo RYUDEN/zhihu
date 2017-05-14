@@ -7,11 +7,12 @@
 </template>
 
 <script>
+  import  api from './api/index'
   import headView from "./components/header/header"
+
 export default {
   name: 'app',
-  components:{headView}
-}
+  components:{headView},}
 </script>
 
 <style>
@@ -43,16 +44,6 @@ export default {
   height: 100%;
   background-color: rgba(200,200,200,0.5);
   z-index: 998;
-}
-.loading div {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  top:40%;
-  margin: 30px auto;
-  border-radius: 50%;
-  background-color: rosybrown;
-  animation: load 1s infinite alternate;
 }
 @keyframes load {
   from {opacity: 0.8;transform: scale(0.5)}

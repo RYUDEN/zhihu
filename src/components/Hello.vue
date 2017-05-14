@@ -9,18 +9,14 @@
         </div>
       </div>
     </div>
-    <div v-if="loading" class="loading">
-      <div></div>
-    </div>
-    <div @click="loadBefore()" v-if="!loading" class="load" id="load"><a>加载更多</a></div>
+    <i class="fa fa-spinner fa-spin fa-2x"  v-show="loading"></i>
   </div>
 </template>
 
 <script>
   import api from './../api/index'
-  import {mapState} from'vuex'
 export default {
-  mounted(){
+  created(){
     var vue = this;
     vue.loading = true;
     api.getNews().then((response) => {
@@ -30,11 +26,18 @@ export default {
         vue.loading = false
     })
   },
+    mounted(){
+        addEventListener('scroll',this.show)
+  },
+    beforeDestroy() {
+      removeEventListener('scroll',this.show)
+    },
   name: 'hello',
   data () {
     return {
       list:[],
       count:1,
+      scroller: null,
       loading:false
     }
   },
@@ -48,6 +51,16 @@ export default {
           }
         }
       )
+    },
+    show(){
+            var Screen = window.innerHeight;//屏幕高度
+            var scroll =    document.body.scrollTop;//滚动条 滚动的高度
+            var plus = document.body.scrollHeight;// 文档总共的高度     当文档滚动到最下方时候,screen + scroll = plus
+
+            if(Screen+scroll>=plus){
+               removeEventListener('scroll',this.show);
+               this.loadBefore()
+            }
     },
     getList(){
       var vue = this;
@@ -63,7 +76,8 @@ export default {
       setTimeout(() => {
         vue.count--;
         vue.getList();
-      },500)
+        addEventListener('scroll',this.show)
+      },3000)
     },
     GetDate(Count) {
       var dd = new Date();
@@ -124,7 +138,6 @@ a {
   .list-con img{
     width: 100px;
     height: 100px;
-    max-width: 300px;
   }
   .list-title{
     /*display: flex;*/
@@ -134,10 +147,6 @@ a {
     margin-left: 5px;
     z-index: 9 ;
     background-color: white;
-  }
-  .load{
-    padding: 5px;
-    bottom: 0;
   }
   @media screen and (min-width:420px ) {
     .hello{

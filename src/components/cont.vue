@@ -1,5 +1,5 @@
 <template>
-  <div class="cont">
+      <div class="cont">
     <div v-if="data.image" class="cont-img">
       <img  :src="data.image" alt="">
       <div class="cont-img-mask"></div>
@@ -10,14 +10,15 @@
       </div>
     </div>
     <div v-if="loading" class="loading">
-      <div></div>
+       <p class="cont-loading"><i class="fa fa-spinner fa-spin"  v-show="loading"></i>wait...</p>
+
     </div>
-    <h3 class="back" @click="backTohis"><span>←      返回</span></h3>
+    <i class="fa fa-arrow-left fa-2x back" @click="backTohis"></i>
   </div>
 </template>
-<script type="text/ecmascript-6">
+<script>
   import api from './../api/index'
-  import touch from './../touch/touch'
+  import touch from './../touch/touch.js'
   export default{
     created(){
       var vue =this;
@@ -29,8 +30,14 @@
           vue.loading = false
         }
       );
-
+      touch.addListener();
     },
+      mounted(){
+          addEventListener('scroll',this.isTop)
+      },
+      beforeDestroy() {
+          touch.removeListener()
+      },
     data(){
       return{
         data:'',
@@ -44,12 +51,6 @@
           window.open(href);
         }
     },
-      back(event){
-        touch.startHandler(event);
-        touch.moveHandler(event);
-        touch.endHandler();
-        touch.addListener()
-      },
       backTohis:function () {
         window.history.back()
       }
@@ -138,13 +139,32 @@
   }
   .back{
     position: fixed;
-    bottom: 0;
-    margin-bottom: 0;
-    vertical-align: middle;
-    background-color:rgba(255,255,255,0.8);
-    width: 100%;
-    height: 35px;
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    box-sizing: border-box;
+    vertical-align: center;
+    border-radius: 50%;
+    bottom: 20px;
+    left: 30px;
+    margin-top: 10px;
+    color: #2d78e7;
+    font-size: 35px;
+    padding: 5px;
+    background-color: rgba(255,255,255,0.5);
+    box-shadow: #2d78e7 0 0 15px;
+    /*vertical-align: middle;*/
+    /*background-color:rgba(255,255,255,0.8);*/
+    /*width: 100%;*/
+    /*height: 35px;*/
     z-index:999;
+  }
+  .cont-loading{
+      position: fixed;
+      width: 100%;
+      font-size: 20px;
+      top:50%;
+      text-align: center;
   }
   @media screen and (min-width:420px ) {
     .cont{

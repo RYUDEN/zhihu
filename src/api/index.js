@@ -2,7 +2,7 @@
  * Created by liu on 17-4-8.
  */
   import Vue from "vue"
-  import resource from "vue-resource"
+  // import resource from "vue-resource"
   import {
     newsLatest,
     newsBefore,

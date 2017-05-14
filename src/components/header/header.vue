@@ -10,7 +10,7 @@
         <div><router-link to="/">首页</router-link></div>
         <div><router-link to="/themes">主题日报</router-link></div>
         <div><router-link to="/me">关于</router-link></div>
-        <div @click="navBar"><a class="close-btn">close</a></div>
+        <div @click="navBar"><i class="close-btn fa fa-times "></i></div>
       </div>
     </transition>
 
@@ -64,8 +64,8 @@
     flex: 1;
   }
   .close-btn{
-    font-size: 12px;
-    color: #aa488c;
+    font-size: 14px;
+    color: #2d78e7;
   }
   .title-enter-active{
     animation: title-in 0.6s;

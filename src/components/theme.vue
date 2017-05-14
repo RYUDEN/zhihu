@@ -27,7 +27,7 @@
                 loading:false
             }
         },
-        mounted(){
+        created(){
             var vue = this;
             vue.loading = true;
             api.getThemeId(this.$route.query.id).then((data) => {

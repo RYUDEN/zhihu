@@ -21,7 +21,7 @@
         loading:false
       }
     },
-    mounted(){
+    created(){
       var vue = this;
       vue.loading = true;
       api.getThemes().then((data) =>  {
@@ -29,7 +29,7 @@
         this.themes = data.others;
         vue.loading = false
 
-      });
+      })
     },
     methods:{
       go(id) {
