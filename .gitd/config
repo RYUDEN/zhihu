@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/RYUDEN/MusicPlayer-Vue.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[remote "org"]
+	url = https://github.com/RYUDEN/zhihu.git
+	fetch = +refs/heads/*:refs/remotes/org/*

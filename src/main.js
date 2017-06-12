@@ -2,27 +2,18 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import vueBus from 'vue-bus'
 import router from './router'
-import Vuex from 'vuex'
-import font from './font-awesome/css/font-awesome.min.css'
+import font from './font-awesome-4.7.0/css/font-awesome.min.css'
 import VueResource from 'vue-resource'
-// import storage from '/storage/stroage'
-Vue.use(font)
-Vue.use(Vuex)
-Vue.use(VueResource)
-// Vue.prototype.storage = storage
 Vue.config.productionTip = false
-
+Vue.use(font)
+Vue.use(VueResource)
+Vue.use(vueBus)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-    // storage,
   template: '<App/>',
   components: { App }
-})
-const store = new Vuex.Store({
-  state:{
-    loading:false
-  }
 })

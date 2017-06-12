@@ -1,6 +1,6 @@
-# zhuhuribao
+# so
 
-> a demo of zhihu-daily
+> A Vue.js project
 
 ## Build Setup
 

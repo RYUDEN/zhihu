@@ -1,4 +1,5 @@
 <template>
+    <transition name="cont">
       <div class="cont">
     <div v-if="data.image" class="cont-img">
       <img  :src="data.image" alt="">
@@ -9,17 +10,25 @@
       <div @click.prevent="pop($event)" v-html="data.body">
       </div>
     </div>
-    <div v-if="loading" class="loading">
-       <p class="cont-loading"><i class="fa fa-spinner fa-spin"  v-show="loading"></i>wait...</p>
-
+    <div v-if="likeS" class="likeBtn" @click="insertLike" :class='{isLike:likeItem.like}'>
+      <i class="fa fa-heart"></i>
     </div>
-    <i class="fa fa-arrow-left fa-2x back" @click="backTohis"></i>
+    <div v-if="loading" class="maskCard">
+       <p class="loading"><i class="fa fa-spinner fa-spin"  v-show="loading"></i>wait...</p>
+    </div>
   </div>
+  </transition>
+
 </template>
 <script>
-  import api from './../api/index'
-  import touch from './../touch/touch.js'
+  import api from '@/api/index'
   export default{
+    mounted(){
+      addEventListener('scroll',this.showBtn)
+    },
+    beforeDestroy() {
+      removeEventListener('scroll',this.showBtn)
+    },
     created(){
       var vue =this;
       vue.loading = true;
@@ -27,33 +36,60 @@
         (response) => {
           response = response.body;
           this.data = response;
-          vue.loading = false
+          this.likeItem.id = response.id;
+          this.likeItem.image = response.image;
+          this.likeItem.title = response.title;
+          this.fetchLike();
+          vue.loading = false;
         }
       );
-      touch.addListener();
+      this.$emit('ref',this.$route.path)
     },
-      mounted(){
-          addEventListener('scroll',this.isTop)
-      },
-      beforeDestroy() {
-          touch.removeListener()
-      },
     data(){
       return{
         data:'',
-        loading:false
+        loading:false,
+        likeS:false,
+        likeItem:{
+            title:'',
+            id:'',
+            image:'',
+            like:false
+        },
+        ulLike:{}
       }
     },
     methods:{
+      fetchLike(){
+          if(window.localStorage.zhihu){
+              let dd = JSON.parse(window.localStorage.getItem('zhihu'));
+              let id = this.likeItem.id;
+              if(dd[id]){
+                this.likeItem.like=dd[id].like
+              };
+              this.ulLike = dd
+          }
+      },
+      insertLike(){
+          this.likeItem.like = !this.likeItem.like;
+          let ulike = this.ulLike;
+          ulike[this.likeItem.id] = this.likeItem;
+          window.localStorage.setItem('zhihu',JSON.stringify(ulike))
+      },
+      showBtn(){
+        let cont =  document.getElementsByClassName('cont')[0].getBoundingClientRect().top;
+        if(cont<-300){
+            this.likeS = true
+        }else{
+            this.likeS = false
+        }
+      },
       pop(e) {
         let href = e.target.href;
         if (href) {
           window.open(href);
         }
     },
-      backTohis:function () {
-        window.history.back()
-      }
   }
   }
 </script>
@@ -78,6 +114,7 @@
     height: 100%;
     background-color: rgba(255, 238, 248, 0.3);
   }
+
 .cont-title{
   position: absolute;
   right: 0;
@@ -137,34 +174,18 @@
     position: relative;
     border: 1px solid #2d78e7;
   }
-  .back{
+  .maskCard{
     position: fixed;
-    width: 42px;
-    height: 42px;
-    line-height: 42px;
-    box-sizing: border-box;
-    vertical-align: center;
-    border-radius: 50%;
-    bottom: 20px;
-    left: 30px;
-    margin-top: 10px;
-    color: #2d78e7;
-    font-size: 35px;
-    padding: 5px;
-    background-color: rgba(255,255,255,0.5);
-    box-shadow: #2d78e7 0 0 15px;
-    /*vertical-align: middle;*/
-    /*background-color:rgba(255,255,255,0.8);*/
-    /*width: 100%;*/
-    /*height: 35px;*/
-    z-index:999;
+    background-color: rgba(34, 135, 222, 0.05);
+    width: 100%;
+    height: 100%;
+    top:0;
+    transition: 0.5s;
   }
-  .cont-loading{
-      position: fixed;
-      width: 100%;
-      font-size: 20px;
-      top:50%;
-      text-align: center;
+  .loading{
+    margin: 80% auto;
+    width: 100%;
+    text-align: center;
   }
   @media screen and (min-width:420px ) {
     .cont{
@@ -172,4 +193,42 @@
       margin: auto;
     }
   }
+    .contCard-enter-active{
+      animation:contIn 0.5s;
+    }
+    .contCard-leave-active{
+      animation:contOut 0.5s;
+    }
+    @keyframes contIn{
+      from{
+        opacity: 0;
+        transform:scale(0.5);
+      }
+      to{
+        opacity: 1;
+        transform:scale(1);
+      }
+    }
+    @keyframes contOut{
+      from{
+        opacity: 1;
+        transform:scale(1);
+      }
+      to{
+        opacity: 0;
+        transform:scale(0.5);
+      }
+    }
+    .likeBtn {
+      position: fixed;
+      z-index: 99;
+      right: 15px;
+      bottom: 128px;
+      padding: 15px;
+      background-color: rgba(34, 135, 222, 0.37);
+      color: #fff;
+    }
+    .isLike{
+      color:#ff7b7b;
+    }
 </style>
